@@ -5,6 +5,7 @@
 #include <limits>
 #include <string>
 #include <vector>
+#define MAX 10000000
 
 using namespace std;
 
@@ -159,9 +160,142 @@ public:
         products.push_back(Product(name, price, stock, sold));
 
 
+    }
+
+//Trīs lētākie funkcija
+
+    void topCheapest()
+    {
+
+        float frstmin, secmin, trdmin = MAX;
+        string frstnamec, secnamec, trdnamec;
+
+        for (auto prod1: products)
+        {
+
+            if (prod1.getProductPrice() < frstmin)
+            {
+                trdmin = secmin;
+                secmin = frstmin;
+                frstmin = prod1.getProductPrice();
+                frstnamec = prod1.getProductName();
+            }
+ 
+            else if (prod1.getProductPrice() < secmin)
+            {
+                trdmin = secmin;
+                secmin = prod1.getProductPrice();
+                secnamec = prod1.getProductName();
+            }
+
+            else if (prod1.getProductPrice() < trdmin)
+            {
+                trdmin = prod1.getProductPrice();
+                trdnamec = prod1.getProductName();
+            }
+        }
+
+        cout << endl << "Three cheapest products (In ascending order by price): " << endl; 
+        cout << frstnamec << ": " << frstmin << " Euro" << endl;
+        cout << secnamec << ": " << secmin << " Euro" << endl;
+        cout << trdnamec << ": " << trdmin << " Euro" << endl;
+    }
+
+//Trīs pelnošākie produkti
+
+    void topMostEarned()
+    {
+        float frstmax, secmax, trdmax = 0;
+        string frstnamee, secnamee, trdnamee;
+        float earned;
+
+        for(auto prod2: products)
+        {
+            earned = prod2.getProductPrice() * prod2.getProductSold();
+
+            if (earned > frstmax)
+            {
+                trdmax = secmax;
+                secmax = frstmax;
+                frstmax = earned;
+                frstnamee = prod2.getProductName();
+            }
+
+            else if (earned > secmax && earned != frstmax)
+            {
+                trdmax = secmax;
+                secmax = earned;
+                secnamee = prod2.getProductName();
+            }
+
+            else if (earned > trdmax && earned != secmax)
+                trdmax = earned;
+                trdnamee = prod2.getProductName();
+            }
+
+        cout << endl << "Three most earning products: " << endl;
+        cout << frstnamee << ": " << frstmax << " Euro" << endl;
+        cout << secnamee << ": " << secmax << " Euro" << endl;
+        cout << trdnamee << ": " << trdmax << " Euro" << endl;
+    }   
+
+//Trīs vismazāk pārdotie produkti
+
+    void topLeastSold()
+    {
+
+        float frstmins, secmins, trdmins = MAX;
+        string frstnames, secnames, trdnames;
+
+        for (auto prod3: products)
+        {
+
+            if (prod3.getProductSold() < frstmins)
+            {
+                trdmins = secmins;
+                secmins = frstmins;
+                frstmins = prod3.getProductSold();
+                frstnames = prod3.getProductName();
+            }
+ 
+            else if (prod3.getProductPrice() < secmins)
+            {
+                trdmins = secmins;
+                secmins = prod3.getProductSold();
+                secnames = prod3.getProductName();
+            }
+
+            else if (prod3.getProductSold() < trdmins)
+            {
+                trdmins = prod3.getProductSold();
+                trdnames = prod3.getProductName();
+            }
+        }
+
+        cout << endl << "Three least sold products (In ascending order): " << endl; 
+        cout << frstnames << ": " << frstmins << " (Amount of sales)" << endl;
+        cout << secnames << ": " << secmins << " (Amount of sales)" << endl;
+        cout << trdnames << ": " << trdmins << " (Amount of sales)" << endl;
+    } 
+
+//Pārdod produktus
+
+    void productSelling()
+    {
+        cout << "Choose the product you want to sell: " << endl;
+
 
     }
-    
+
+//Viens produkts dati
+
+    void oneProductData()
+    {
+        cout << "Choose the product you want to sell: " << endl;
+
+
+    }
+
 };
 
 int main() {
@@ -189,6 +323,7 @@ int main() {
 
         products.inputProduct();
         products.inputProduct();
+        
         
         products.printAllProducts();
 
