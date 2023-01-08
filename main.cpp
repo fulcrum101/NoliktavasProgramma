@@ -165,9 +165,9 @@ public:
         }
 
         if (productExists) {
-            cout << "Product \"" << name << "\" already exists, entering editing mode" << endl;
+            cout << "Product \"" << name << "\" already exists, entering moddifying mode" << endl;
             cout << "Current price: " << products[existingProductIndex].getProductPrice() << endl;
-            cout << "Input new product price: ";
+            cout << "Modify product price by: ";
             cin >> price;
             while (!cin.good()) {
                 cin.clear();
@@ -177,7 +177,7 @@ public:
             }
 
             cout << "Current stock: " << products[existingProductIndex].getProductLeft() << endl;
-            cout << "Input new product in stock: ";
+            cout << "Modify product in stock by: ";
             cin >> stock;
             while (!cin.good()) {
                 cin.clear();
@@ -187,7 +187,7 @@ public:
             }
 
             cout << "Current sold: " << products[existingProductIndex].getProductSold() << endl;
-            cout << "Input new product sold: ";
+            cout << "Modify product sold by: ";
             cin >> sold;
             while (!cin.good()) {
                 cin.clear();
@@ -196,9 +196,9 @@ public:
                 cin >> sold;
             }
 
-            products[existingProductIndex].setProductPrice(price);
-            products[existingProductIndex].setProductSold(sold);
-            products[existingProductIndex].setProductLeft(stock);
+            products[existingProductIndex].setProductPrice(products[existingProductIndex].getProductPrice() + price);
+            products[existingProductIndex].setProductSold(products[existingProductIndex].getProductSold() + sold);
+            products[existingProductIndex].setProductLeft(products[existingProductIndex].getProductLeft() + stock);
 
             cout << "\nProduct info updated successfully\n\n";
         } else {
