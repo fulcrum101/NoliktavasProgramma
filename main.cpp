@@ -27,7 +27,7 @@ public:
 
     Product(char name[PRODUCT_NAME_LENGTH], float price, int leftAmount, int soldAmount) {
         //TODO: Maybe passing a shorter array could lead to accessing restricted memory?
-        memcpy(this->productName, name, 32 * sizeof(char));
+        memcpy(this->productName, name, PRODUCT_NAME_LENGTH * sizeof(char));
         this->productPrice = price;
         this->productLeftAmount = leftAmount;
         this->productSoldAmount = soldAmount;
@@ -149,7 +149,7 @@ public:
 	    cin.ignore();
         getline(cin, nameInput);
         if (nameInput.length() > PRODUCT_NAME_LENGTH - 1) {
-            nameInput.resize(32);
+            nameInput.resize(PRODUCT_NAME_LENGTH);
             cout << "ERROR: Product name length exceeds " << PRODUCT_NAME_LENGTH-1 << " characters, "
                 << "truncated to: " << nameInput << "\n"; 
         }
