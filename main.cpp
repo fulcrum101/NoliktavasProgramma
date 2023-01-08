@@ -53,6 +53,18 @@ public:
         return this->productSoldAmount;
     }
 
+    void setProductPrice(float price) {
+        this->productPrice = price;
+    } 
+
+    void setProductLeft(int left) {
+        this->productLeftAmount = left;
+    }
+
+    void setProductSold(int sold) {
+        this->productSoldAmount = sold;
+    }
+
     void productPrint() {
         cout  << '\n' << left 
             << setw(15) << "Name: "  << productName << '\n' 
@@ -125,6 +137,8 @@ public:
     }
 
     void inputProduct() {
+        bool productExists = 0;
+        int existingProductIndex = -1;
         string nameInput;
         float price;
         int stock;
@@ -142,36 +156,83 @@ public:
         char name[PRODUCT_NAME_LENGTH] = "";
         strcpy(name, nameInput.c_str());
 
-        cout << "Input product price: ";
-        cin >> price;
-        while (!cin.good()) {
-            cin.clear();
-	        cin.ignore(numeric_limits<streamsize>::max(), '\n');
-            cout << "Error: bad input.\n Please input a valid number: ";
+        for (int i = 0; i < products.size(); i++) {
+            if (products[i].getProductName() == name) {
+                existingProductIndex = i;
+                productExists = 1;
+                break;
+            }
+        }
+
+        if (productExists) {
+            cout << "Product \"" << name << "\" already exists, entering editing mode" << endl;
+            cout << "Current price: " << products[existingProductIndex].getProductPrice() << endl;
+            cout << "Input new product price: ";
             cin >> price;
-        }
+            while (!cin.good()) {
+                cin.clear();
+	            cin.ignore(numeric_limits<streamsize>::max(), '\n');
+                cout << "Error: bad input.\n Please input a valid number: ";
+                cin >> price;
+            }
 
-        cout << "Input product in stock: ";
-        cin >> stock;
-        while (!cin.good()) {
-            cin.clear();
-	        cin.ignore(numeric_limits<streamsize>::max(), '\n');
-            cout << "Error: bad input.\n Please input a valid number: ";
+            cout << "Current stock: " << products[existingProductIndex].getProductLeft() << endl;
+            cout << "Input new product in stock: ";
             cin >> stock;
-        }
+            while (!cin.good()) {
+                cin.clear();
+	            cin.ignore(numeric_limits<streamsize>::max(), '\n');
+                cout << "Error: bad input.\n Please input a valid number: ";
+                cin >> stock;
+            }
 
-        cout << "Input product sold: ";
-        cin >> sold;
-        while (!cin.good()) {
-            cin.clear();
-	        cin.ignore(numeric_limits<streamsize>::max(), '\n');
-            cout << "Error: bad input.\n Please input a valid number: ";
+            cout << "Current sold: " << products[existingProductIndex].getProductSold() << endl;
+            cout << "Input new product sold: ";
             cin >> sold;
+            while (!cin.good()) {
+                cin.clear();
+	            cin.ignore(numeric_limits<streamsize>::max(), '\n');
+                cout << "Error: bad input.\n Please input a valid number: ";
+                cin >> sold;
+            }
+
+            products[existingProductIndex].setProductPrice(price);
+            products[existingProductIndex].setProductSold(sold);
+            products[existingProductIndex].setProductLeft(stock);
+
+            cout << "\nProduct info updated successfully\n\n";
+        } else {
+            cout << "Input product price: ";
+            cin >> price;
+            while (!cin.good()) {
+                cin.clear();
+	            cin.ignore(numeric_limits<streamsize>::max(), '\n');
+                cout << "Error: bad input.\n Please input a valid number: ";
+                cin >> price;
+            }
+
+            cout << "Input product in stock: ";
+            cin >> stock;
+            while (!cin.good()) {
+                cin.clear();
+	            cin.ignore(numeric_limits<streamsize>::max(), '\n');
+                cout << "Error: bad input.\n Please input a valid number: ";
+                cin >> stock;
+            }
+
+            cout << "Input product sold: ";
+            cin >> sold;
+            while (!cin.good()) {
+                cin.clear();
+	            cin.ignore(numeric_limits<streamsize>::max(), '\n');
+                cout << "Error: bad input.\n Please input a valid number: ";
+                cin >> sold;
+            }
+
+            cout << "\nProduct added successfully\n\n";
+
+            products.push_back(Product(name, price, stock, sold));
         }
-
-        cout << "\nProduct added successfully\n\n";
-
-        products.push_back(Product(name, price, stock, sold));
     }
 
 //Trīs dārgākie funkcija
@@ -437,6 +498,8 @@ int main() {
         products.topMostSold();
         products.topExpensive();
         products.topLeastEarned();
+        products.inputProduct();
+        products.printAllProducts();
     }
 
     return 0;
