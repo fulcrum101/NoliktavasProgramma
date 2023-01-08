@@ -26,7 +26,6 @@ public:
     }
 
     Product(char name[PRODUCT_NAME_LENGTH], float price, int leftAmount, int soldAmount) {
-        //TODO: Maybe passing a shorter array could lead to accessing restricted memory?
         memcpy(this->productName, name, PRODUCT_NAME_LENGTH * sizeof(char));
         this->productPrice = price;
         this->productLeftAmount = leftAmount;
@@ -99,7 +98,7 @@ public:
 
     }
 
-    bool saveToFile() {
+    void saveToFile() {
         ofstream destination(SAVE_FILE_PATH, ios::binary);
 
         for (auto prod: products) {
@@ -107,22 +106,23 @@ public:
         }
 
         destination.close();
-
-        return 1;
     }
 
-    bool readFromFile() {
-        //TODO: Return 0 if file not found
+    void readFromFile() {
         Product tempProduct;
         ifstream source (SAVE_FILE_PATH, ios::binary);
+
+        if (!source.is_open()) {
+            ofstream destination(SAVE_FILE_PATH, ios::binary);
+            destination.close();
+            source.open(SAVE_FILE_PATH, ios::binary);
+        }
 
         while (source.read((char*)&tempProduct, sizeof(Product))){
             this->products.push_back(tempProduct);
         }
 
         source.close();
-
-        return 1;
     }
 
     void printAllProducts() {
