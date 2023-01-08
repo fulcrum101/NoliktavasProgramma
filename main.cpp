@@ -1,3 +1,4 @@
+#include <algorithm>
 #include <iostream>
 #include <fstream>
 #include <iomanip>
@@ -59,8 +60,21 @@ public:
             << setw(15) << "In stock: " << productLeftAmount << '\n'
             << setw(15) << "Total sold: " << productSoldAmount << "\n\n";
     }
+
 };
 
+bool compareSold(Product firstProduct, Product secondProduct) {
+    return firstProduct.getProductSold() > secondProduct.getProductSold();
+}
+
+bool compareEarnings(Product firstProduct, Product secondProduct) {
+    return firstProduct.getProductSold() * firstProduct.getProductPrice() < secondProduct.getProductSold() * secondProduct.getProductPrice();
+}
+
+bool comparePrice(Product firstProduct, Product secondProduct) {
+    return firstProduct.getProductPrice() > secondProduct.getProductPrice();
+}
+    
 class ProductsContainer {
     //Product storage and functions related to work with all products
     vector <Product> products;
@@ -158,8 +172,35 @@ public:
         cout << "\nProduct added successfully\n\n";
 
         products.push_back(Product(name, price, stock, sold));
+    }
 
+//Trīs dārgākie funkcija
 
+    void topExpensive() {
+        int topCount = 3;
+        if (products.size() < 3) {
+            topCount = products.size();
+        }
+        Product * topExpen = new Product[topCount];
+        
+        for (int i = 0; i < topCount; i++) {
+            topExpen[i] = products[i];
+        }
+        sort(topExpen, topExpen+3, comparePrice);
+
+        for (int i = 3; i < products.size(); i++) {
+            if (products[i].getProductSold() > topExpen[topCount-1].getProductSold()) {
+                topExpen[topCount-1] = products[i];
+                sort(topExpen, topExpen+3, comparePrice);
+            }
+        }
+
+        cout << "\nTop " << topCount << " most expensive:\n\n";
+        for (int i = 0; i < topCount; i++) {
+            topExpen[i].productPrint();
+        }
+
+        //delete [] topSold;
     }
 
 //Trīs lētākie funkcija
@@ -238,6 +279,65 @@ public:
         cout << secnamee << ": " << secmax << " Euro" << endl;
         cout << trdnamee << ": " << trdmax << " Euro" << endl;
     }   
+
+//Trīs vis nepelnošākie produkti
+
+    void topLeastEarned() {
+        int topCount = 3;
+        if (products.size() < 3) {
+            topCount = products.size();
+        }
+        Product * leastEarned = new Product[topCount];
+        
+        for (int i = 0; i < topCount; i++) {
+            leastEarned[i] = products[i];
+        }
+        sort(leastEarned, leastEarned+3, compareEarnings);
+
+        for (int i = 3; i < products.size(); i++) {
+            if (products[i].getProductSold() < leastEarned[0].getProductSold()) {
+                leastEarned[0] = products[i];
+                sort(leastEarned, leastEarned+3, compareEarnings);
+            }
+        }
+
+        cout << "\nTop " << topCount << " most earning products:\n\n";
+        for (int i = 0; i < topCount; i++) {
+            leastEarned[i].productPrint();
+            cout << " Earned: " << leastEarned[i].getProductSold() * leastEarned[i].getProductPrice() << endl;
+        }
+
+        //delete [] topSold;
+    }
+
+//Trīs visvairāk pārdotie produkti
+
+    void topMostSold() {
+        int topCount = 3;
+        if (products.size() < 3) {
+            topCount = products.size();
+        }
+        Product * topSold = new Product[topCount];
+        
+        for (int i = 0; i < topCount; i++) {
+            topSold[i] = products[i];
+        }
+        sort(topSold, topSold+3, compareSold);
+
+        for (int i = 3; i < products.size(); i++) {
+            if (products[i].getProductSold() > topSold[topCount-1].getProductSold()) {
+                topSold[topCount-1] = products[i];
+                sort(topSold, topSold+3, compareSold);
+            }
+        }
+
+        cout << "\nTop " << topCount << " most sold products:\n\n";
+        for (int i = 0; i < topCount; i++) {
+            topSold[i].productPrint();
+        }
+
+        //delete [] topSold;
+    }
 
 //Trīs vismazāk pārdotie produkti
 
@@ -323,6 +423,8 @@ int main() {
 
         products.inputProduct();
         products.inputProduct();
+        products.inputProduct();
+        products.inputProduct();
         
         
         products.printAllProducts();
@@ -331,7 +433,11 @@ int main() {
     } else {
 
         products.readFromFile();
-
-        products.printAllProducts();
+        //products.printAllProducts();
+        products.topMostSold();
+        products.topExpensive();
+        products.topLeastEarned();
     }
+
+    return 0;
 }
