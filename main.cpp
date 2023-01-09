@@ -308,50 +308,32 @@ public:
 
     //Top 3 least sold products (Task 6/Option 6)
 
-    void topLeastSold()
+    void topLeastSold() 
     {
-        
-        vector<pair<int, string>> vectorleast;
+        vector<Product> tempProducts = this -> products;
+        sort(tempProducts.begin(), tempProducts.end(), compareSold);
+        reverse(tempProducts.begin(), tempProducts.end());
 
-        for (auto prod: products)
+        for (int i = 0; i < 3 && i < tempProducts.size(); i++)
         {
-            vectorleast.push_back(make_pair(prod.getProductSold(), prod.getProductName()));
+            cout << "\nTop " << i + 1 << " of least sold: \n";
+            tempProducts[i].productPrint();
         }
-
-        sort(vectorleast.rbegin(), vectorleast.rend());
-        reverse(vectorleast.rbegin(), vectorleast.rend());
-
-        cout << "\nThree least sold products: \n" << endl;
-
-        for (int i = 0; i < 3 ; i++)
-        {
-            cout << vectorleast[i].second << ": " << vectorleast[i].first << " Sale/-s\n" << endl;
-        }
-
     }
 
     //Top 3 most earning products (Task 7/Option 7)
 
-    void topMostEarned()
+    void topMostEarned() 
     {
-        vector<pair<float, string>> vectormost;
-        float earned;
+        vector<Product> tempProducts = this -> products;
+        sort(tempProducts.begin(), tempProducts.end(), compareEarnings);
 
-        for (auto prod: products)
+        for (int i = 0; i < 3 && i < tempProducts.size(); i++) 
         {
-            vectormost.push_back(make_pair(prod.getProductPrice() * prod.getProductSold(), prod.getProductName()));
+            cout << "\nTop " << i + 1 << " of most earned: \n";
+            tempProducts[i].productPrint();
         }
-
-        sort(vectormost.rbegin(), vectormost.rend());
-
-        cout << "\nThree most earning products: \n" << endl;
-
-        for (int i = 0; i < 3 ; i++)
-        {
-            cout << vectormost[i].second << ": " << vectormost[i].first << " Euro/-s\n" << endl;
-        }
-
-    } 
+    }
 
     //Top 3 least earning products (Task 8/Option 8)
 
@@ -380,24 +362,15 @@ public:
 
     void topCheapest()
     {
-        
-        vector<pair<int, string>> vectorcheap;
+        vector<Product> tempProducts = this -> products;
+        sort(tempProducts.begin(), tempProducts.end(), comparePrice);
+        reverse(tempProducts.begin(), tempProducts.end());
 
-        for (auto prod: products)
+        for (int i = 0; i < 3 && i < tempProducts.size(); i++)
         {
-            vectorcheap.push_back(make_pair(prod.getProductPrice(), prod.getProductName()));
+            cout << "\nTop " << i + 1 << " of cheapest: \n";
+            tempProducts[i].productPrint();
         }
-
-        sort(vectorcheap.rbegin(), vectorcheap.rend());
-        reverse(vectorcheap.rbegin(), vectorcheap.rend());
-
-        cout << "\nThree cheapest products: \n" << endl;
-
-        for (int i = 0; i < 3 ; i++)
-        {
-            cout << vectorcheap[i].second << ": " << vectorcheap[i].first << " Euro/-s\n" << endl;
-        }
-
     }
 
     //Menu shown to the user
