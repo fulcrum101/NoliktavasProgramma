@@ -136,6 +136,8 @@ public:
         this->products.push_back(prod);
     }
 
+//Add product function
+
     void inputProduct() {
         bool productExists = 0;
         int existingProductIndex = -1;
@@ -235,7 +237,7 @@ public:
         }
     }
 
-//Trīs dārgākie funkcija
+//Top 3 most expensive products
 
     void topExpensive() {
         int topCount = 3;
@@ -264,7 +266,7 @@ public:
         //delete [] topSold;
     }
 
-//Trīs lētākie funkcija
+//Top 3 cheapest products
 
     void topCheapest()
     {
@@ -303,7 +305,7 @@ public:
         cout << trdnamec << ": " << trdmin << " Euro" << endl;
     }
 
-//Trīs pelnošākie produkti
+//Top 3 most earning products
 
     void topMostEarned()
     {
@@ -341,7 +343,7 @@ public:
         cout << trdnamee << ": " << trdmax << " Euro" << endl;
     }   
 
-//Trīs vis nepelnošākie produkti
+//Top 3 least earning products
 
     void topLeastEarned() {
         int topCount = 3;
@@ -371,7 +373,7 @@ public:
         //delete [] topSold;
     }
 
-//Trīs visvairāk pārdotie produkti
+//Top 3 most sold products
 
     void topMostSold() {
         int topCount = 3;
@@ -400,7 +402,7 @@ public:
         //delete [] topSold;
     }
 
-//Trīs vismazāk pārdotie produkti
+//Top 3 least sold products
 
     void topLeastSold()
     {
@@ -439,15 +441,15 @@ public:
         cout << trdnames << ": " << trdmins << " (Amount of sales)" << endl;
     } 
 
-//Pārdod produktus
+//Sell product/-s from stock
 
     void productSelling()
     {
         string sell;
         int count_sale, count_stock, amount;
-        cout << "Type the product you want to sell: ";
+        cout << "\nType the product you want to sell: ";
         getline(cin >> ws, sell);
-        cout << "Type how many products you want to sell (in numbers): ";
+        cout << "\nType how many products you want to sell (in numbers): ";
         cin >> amount;
 
         for (auto prod: products)
@@ -458,9 +460,9 @@ public:
                 count_stock = prod.getProductLeft();
                 prod.setProductSold(count_sale + amount);
                 prod.setProductLeft(count_stock - amount);
-                cout << "Product successfully sold!" << endl;
-                cout << "Amount of products sold after the sale: " << prod.getProductSold() << endl;
-                cout << "Products left in stock: " << prod.getProductLeft() << endl;
+                cout << "\nProduct successfully sold!" << endl;
+                cout << "\nAmount of products sold after the sale: " << prod.getProductSold() << endl;
+                cout << "\nProducts left in stock: " << prod.getProductLeft() << endl;
             }
 
             else
@@ -470,7 +472,7 @@ public:
         }
     }
 
-//Viens produkts dati
+//Function to show info about a single product
 
     void oneProductData()
     {
@@ -482,8 +484,8 @@ public:
         {
             if (singleprod == prod.getProductName())
             {
-                cout << "Product data: " << endl;
-                cout << "Name: " << prod.getProductName() << endl;
+                cout << "\nProduct data: " << endl;
+                cout << "\nName: " << prod.getProductName() << endl;
                 cout << "Price: " << prod.getProductPrice() << endl;
                 cout << "Amount left: " << prod.getProductLeft() << endl;
                 cout << "Amount sold: " << prod.getProductSold() << endl;
@@ -496,9 +498,27 @@ public:
         }
     }
 
+//Menu shown to the user
+
+    void menu()
+    {
+        cout << "\nOption 1: Add a product/-s to stock" << endl;
+        cout << "Option 2: Show all the products in stock" << endl;
+        cout << "Option 3: Sell a product/-s" << endl;
+        cout << "Option 4: Data about a product" << endl;
+        cout << "Option 5: Top 3 most sold products" << endl;
+        cout << "Option 6: Top 3 least sold products" << endl;
+        cout << "Option 7: Top 3 most earning products" << endl;
+        cout << "Option 8: Top 3 least earning products" << endl;
+        cout << "Option 9: Top 3 most expensive products" << endl;
+        cout << "Option 10: Top 3 cheapest products" << endl;
+        cout << "Option 11: End program" << endl;
+        cout << "Choose an option (by typing a number): ";
+    }
+
 };
 
-int main() {
+/*int main() {
     bool writeMode = 0;
     ProductsContainer products;
     cout << "Write mode? (1 yes, 0 no): ";
@@ -519,7 +539,7 @@ int main() {
         products.addProduct(product2);
         products.addProduct(product3);
         products.addProduct(product4);
-        */
+        
 
         products.inputProduct();
         products.inputProduct();
@@ -541,5 +561,75 @@ int main() {
         products.printAllProducts();
     }
 
+    return 0;
+}
+*/
+
+
+//Main function prototype
+
+int main()
+{
+    ProductsContainer products;
+    int option;
+
+    while (option != 11)
+    {
+        products.menu();
+        cin >> option;
+        cout << "\nChosen Option: " << option << endl;
+        enum choices {One = 1, Two = 2, Three = 3, Four = 4, Five = 5, Six = 6, Seven = 7, Eight = 8, Nine = 9, Ten = 10, Eleven = 11};
+
+        switch(option)
+        {
+            case One:
+                //Function to input product
+                products.inputProduct();
+                break;
+            case Two:
+                //Function to print all products
+                products.printAllProducts();
+                break;
+            case Three:
+                //Function to sell a product
+                products.productSelling();
+                break;
+            case Four:
+                //Function to show data about a single product
+                products.oneProductData();
+                break;
+            case Five:
+                //Function to show Top 3 most sold products
+                products.topMostSold();
+                break;
+            case Six:
+                //Function to show Top 3 least sold products
+                products.topLeastSold();
+                break;
+            case Seven:
+                //Function to show Top 3 most earning products
+                products.topMostEarned();
+                break;
+            case Eight:
+                //Function to show Top 3 least earning products
+                products.topLeastEarned();
+                break;
+            case Nine:
+                //Function to show Top 3 most expensive products
+                products.topExpensive();
+                break;
+            case Ten:
+                //Function to show Top 3 cheapest products
+                products.topCheapest();
+                break;
+            case Eleven:
+                //End program
+                break;
+            default:
+                cout << "Error: Choose one of the options!" << endl;
+        }
+
+        products.saveToFile();
+    }
     return 0;
 }
