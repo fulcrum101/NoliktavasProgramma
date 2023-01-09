@@ -79,7 +79,7 @@ bool compareSold(Product firstProduct, Product secondProduct) {
 }
 
 bool compareEarnings(Product firstProduct, Product secondProduct) {
-    return firstProduct.getProductSold() * firstProduct.getProductPrice() < secondProduct.getProductSold() * secondProduct.getProductPrice();
+    return firstProduct.getProductSold() * firstProduct.getProductPrice() > secondProduct.getProductSold() * secondProduct.getProductPrice();
 }
 
 bool comparePrice(Product firstProduct, Product secondProduct) {
@@ -252,7 +252,7 @@ public:
         sort(topExpen, topExpen+3, comparePrice);
 
         for (int i = 3; i < products.size(); i++) {
-            if (products[i].getProductSold() > topExpen[topCount-1].getProductSold()) {
+            if (products[i].getProductPrice() > topExpen[topCount-1].getProductPrice()) {
                 topExpen[topCount-1] = products[i];
                 sort(topExpen, topExpen+3, comparePrice);
             }
@@ -263,7 +263,7 @@ public:
             topExpen[i].productPrint();
         }
 
-        //delete [] topSold;
+    delete [] topExpen;
     }
 
 //Top 3 cheapest products
@@ -358,19 +358,19 @@ public:
         sort(leastEarned, leastEarned+3, compareEarnings);
 
         for (int i = 3; i < products.size(); i++) {
-            if (products[i].getProductSold() < leastEarned[0].getProductSold()) {
+            if (products[i].getProductSold() * products[i].getProductPrice()  < leastEarned[0].getProductSold() * leastEarned[0].getProductPrice()) {
                 leastEarned[0] = products[i];
                 sort(leastEarned, leastEarned+3, compareEarnings);
             }
         }
 
-        cout << "\nTop " << topCount << " most earning products:\n\n";
-        for (int i = 0; i < topCount; i++) {
+        cout << "\nTop " << topCount << " least earning products:\n\n";
+        for (int i = topCount-1; i >= 0; i--) {
             leastEarned[i].productPrint();
             cout << " Earned: " << leastEarned[i].getProductSold() * leastEarned[i].getProductPrice() << endl;
         }
 
-        //delete [] topSold;
+        delete [] leastEarned;
     }
 
 //Top 3 most sold products
@@ -399,7 +399,7 @@ public:
             topSold[i].productPrint();
         }
 
-        //delete [] topSold;
+        delete [] topSold;
     }
 
 //Top 3 least sold products
@@ -518,59 +518,12 @@ public:
 
 };
 
-/*int main() {
-    bool writeMode = 0;
-    ProductsContainer products;
-    cout << "Write mode? (1 yes, 0 no): ";
-    cin >> writeMode;
-    if (writeMode) {
-        /*
-        char name1[32] = "Prod 1";
-        char name2[32] = "Prod 2";
-        char name3[32] = "Prod 3";
-        char name4[32] = "Prod 4";
-
-        Product product1(name1, 12.2, 13, 25);
-        Product product2(name2, 25.0, 15, 32);
-        Product product3(name3, 137.99, 23, 35);
-        Product product4(name4, 64, 132, 52);
-
-        products.addProduct(product1);
-        products.addProduct(product2);
-        products.addProduct(product3);
-        products.addProduct(product4);
-        
-
-        products.inputProduct();
-        products.inputProduct();
-        products.inputProduct();
-        products.inputProduct();
-        
-        
-        products.printAllProducts();
-
-        products.saveToFile();
-    } else {
-
-        products.readFromFile();
-        //products.printAllProducts();
-        products.topMostSold();
-        products.topExpensive();
-        products.topLeastEarned();
-        products.inputProduct();
-        products.printAllProducts();
-    }
-
-    return 0;
-}
-*/
-
-
 //Main function prototype
 
 int main()
 {
     ProductsContainer products;
+    products.readFromFile();
     int option;
 
     while (option != 11)
