@@ -6,9 +6,9 @@
 #include <limits>
 #include <string>
 #include <vector>
-#define MAX 10000000
 
 using namespace std;
+
 
 const int PRODUCT_NAME_LENGTH = 32;
 const char SAVE_FILE_PATH [13] = "saveFile.bin";
@@ -91,12 +91,15 @@ class ProductsContainer {
     vector <Product> products;
 
 public:
+    //Task functions
     ProductsContainer() {
 
     }
     ~ProductsContainer() {
 
     }
+
+    //File reading and saving functions
 
     void saveToFile() {
         ofstream destination(SAVE_FILE_PATH, ios::binary);
@@ -125,18 +128,7 @@ public:
         source.close();
     }
 
-    void printAllProducts() {
-        cout << "\nProdukti:\n";
-        for (auto prod: products) {
-            prod.productPrint();
-        }
-    }
-
-    void addProduct(Product prod) {
-        this->products.push_back(prod);
-    }
-
-//Add product function
+    //Input product function (Task 1/Option 1)
 
     void inputProduct() {
         bool productExists = 0;
@@ -237,113 +229,149 @@ public:
         }
     }
 
-//Top 3 most expensive products
+    //Print all products (Task 2/Option 2)
 
-    void topExpensive() {
+    void printAllProducts() {
+        cout << "\nProdukti:\n";
+        for (auto prod: products) {
+            prod.productPrint();
+        }
+    }
+
+    //Sell product/-s from stock (Task 3/Option 3)
+
+    void productSelling()
+    {
+        string sell;
+        int count_sale, count_stock, amount;
+        cout << "\nType the product you want to sell: ";
+        getline(cin >> ws, sell);
+        cout << "\nType how many products you want to sell (in numbers): ";
+        cin >> amount;
+
+        for (auto &prod: products)
+        {
+            if (sell == prod.getProductName())
+            {
+                count_sale = prod.getProductSold();
+                count_stock = prod.getProductLeft();
+                prod.setProductSold(count_sale + amount);
+                prod.setProductLeft(count_stock - amount);
+                cout << "\nProduct successfully sold!" << endl;
+                cout << "\nAmount of products sold after the sale: " << prod.getProductSold() << endl;
+                cout << "\nProducts left in stock: " << prod.getProductLeft() << endl;
+            }
+
+            else
+            {
+                continue;
+            }
+        }
+    }
+
+    //Function to show info about a single product (Task 4/Option 4)
+
+    void oneProductData()
+    {
+        string singleprod;
+        cout << "\nChoose the product you want to display: ";
+        getline(cin >> ws, singleprod);
+
+        for (auto prod: products)
+        {
+            if (singleprod == prod.getProductName())
+            {
+                cout << "\nProduct data: " << endl;
+                cout << "\nName: " << prod.getProductName() << endl;
+                cout << "Price: " << prod.getProductPrice() << endl;
+                cout << "Amount left: " << prod.getProductLeft() << endl;
+                cout << "Amount sold: " << prod.getProductSold() << endl;
+            }
+
+            else
+            {
+                continue;
+            } 
+        }
+    }
+
+    //Top 3 most sold products (Task 5/Option 5)
+
+    void topMostSold() {
         int topCount = 3;
         if (products.size() < 3) {
             topCount = products.size();
         }
-        Product * topExpen = new Product[topCount];
+        Product * topSold = new Product[topCount];
         
         for (int i = 0; i < topCount; i++) {
-            topExpen[i] = products[i];
+            topSold[i] = products[i];
         }
-        sort(topExpen, topExpen+3, comparePrice);
+        sort(topSold, topSold+3, compareSold);
 
         for (int i = 3; i < products.size(); i++) {
-            if (products[i].getProductPrice() > topExpen[topCount-1].getProductPrice()) {
-                topExpen[topCount-1] = products[i];
-                sort(topExpen, topExpen+3, comparePrice);
+            if (products[i].getProductSold() > topSold[topCount-1].getProductSold()) {
+                topSold[topCount-1] = products[i];
+                sort(topSold, topSold+3, compareSold);
             }
         }
 
-        cout << "\nTop " << topCount << " most expensive:\n\n";
+        cout << "\nTop " << topCount << " most sold products:\n\n";
         for (int i = 0; i < topCount; i++) {
-            topExpen[i].productPrint();
+            topSold[i].productPrint();
         }
 
-    delete [] topExpen;
+        delete [] topSold;
     }
 
-//Top 3 cheapest products
+    //Top 3 least sold products (Task 6/Option 6)
 
-    void topCheapest()
+    void topLeastSold()
     {
+        
+        vector<pair<int, string>> vectorleast;
 
-        float frstmin, secmin, trdmin = MAX;
-        string frstnamec, secnamec, trdnamec;
-
-        for (auto prod1: products)
+        for (auto prod: products)
         {
-
-            if (prod1.getProductPrice() < frstmin)
-            {
-                trdmin = secmin;
-                secmin = frstmin;
-                frstmin = prod1.getProductPrice();
-                frstnamec = prod1.getProductName();
-            }
- 
-            else if (prod1.getProductPrice() < secmin)
-            {
-                trdmin = secmin;
-                secmin = prod1.getProductPrice();
-                secnamec = prod1.getProductName();
-            }
-
-            else if (prod1.getProductPrice() < trdmin)
-            {
-                trdmin = prod1.getProductPrice();
-                trdnamec = prod1.getProductName();
-            }
+            vectorleast.push_back(make_pair(prod.getProductSold(), prod.getProductName()));
         }
 
-        cout << endl << "Three cheapest products (In ascending order by price): " << endl; 
-        cout << frstnamec << ": " << frstmin << " Euro" << endl;
-        cout << secnamec << ": " << secmin << " Euro" << endl;
-        cout << trdnamec << ": " << trdmin << " Euro" << endl;
+        sort(vectorleast.rbegin(), vectorleast.rend());
+        reverse(vectorleast.rbegin(), vectorleast.rend());
+
+        cout << "\nThree least sold products: \n" << endl;
+
+        for (int i = 0; i < 3 ; i++)
+        {
+            cout << vectorleast[i].second << ": " << vectorleast[i].first << " Sale/-s\n" << endl;
+        }
+
     }
 
-//Top 3 most earning products
+    //Top 3 most earning products (Task 7/Option 7)
 
     void topMostEarned()
     {
-        float frstmax, secmax, trdmax = 0;
-        string frstnamee, secnamee, trdnamee;
+        vector<pair<float, string>> vectormost;
         float earned;
 
-        for(auto prod2: products)
+        for (auto prod: products)
         {
-            earned = prod2.getProductPrice() * prod2.getProductSold();
+            vectormost.push_back(make_pair(prod.getProductPrice() * prod.getProductSold(), prod.getProductName()));
+        }
 
-            if (earned > frstmax)
-            {
-                trdmax = secmax;
-                secmax = frstmax;
-                frstmax = earned;
-                frstnamee = prod2.getProductName();
-            }
+        sort(vectormost.rbegin(), vectormost.rend());
 
-            else if (earned > secmax && earned != frstmax)
-            {
-                trdmax = secmax;
-                secmax = earned;
-                secnamee = prod2.getProductName();
-            }
+        cout << "\nThree most earning products: \n" << endl;
 
-            else if (earned > trdmax && earned != secmax)
-                trdmax = earned;
-                trdnamee = prod2.getProductName();
-            }
+        for (int i = 0; i < 3 ; i++)
+        {
+            cout << vectormost[i].second << ": " << vectormost[i].first << " Euro/-s\n" << endl;
+        }
 
-        cout << endl << "Three most earning products: " << endl;
-        cout << frstnamee << ": " << frstmax << " Euro" << endl;
-        cout << secnamee << ": " << secmax << " Euro" << endl;
-        cout << trdnamee << ": " << trdmax << " Euro" << endl;
-    }   
+    } 
 
-//Top 3 least earning products
+    //Top 3 least earning products (Task 8/Option 8)
 
     void topLeastEarned() {
         int topCount = 3;
@@ -373,132 +401,60 @@ public:
         delete [] leastEarned;
     }
 
-//Top 3 most sold products
+    //Top 3 most expensive products (Task 9/Option 9)
 
-    void topMostSold() {
+    void topExpensive() {
         int topCount = 3;
         if (products.size() < 3) {
             topCount = products.size();
         }
-        Product * topSold = new Product[topCount];
+        Product * topExpen = new Product[topCount];
         
         for (int i = 0; i < topCount; i++) {
-            topSold[i] = products[i];
+            topExpen[i] = products[i];
         }
-        sort(topSold, topSold+3, compareSold);
+        sort(topExpen, topExpen+3, comparePrice);
 
         for (int i = 3; i < products.size(); i++) {
-            if (products[i].getProductSold() > topSold[topCount-1].getProductSold()) {
-                topSold[topCount-1] = products[i];
-                sort(topSold, topSold+3, compareSold);
+            if (products[i].getProductPrice() > topExpen[topCount-1].getProductPrice()) {
+                topExpen[topCount-1] = products[i];
+                sort(topExpen, topExpen+3, comparePrice);
             }
         }
 
-        cout << "\nTop " << topCount << " most sold products:\n\n";
+        cout << "\nTop " << topCount << " most expensive:\n\n";
         for (int i = 0; i < topCount; i++) {
-            topSold[i].productPrint();
+            topExpen[i].productPrint();
         }
 
-        delete [] topSold;
+    delete [] topExpen;
     }
 
-//Top 3 least sold products
+    //Top 3 cheapest products (Task 10/Option 10)
 
-    void topLeastSold()
+    void topCheapest()
     {
-
-        float frstmins, secmins, trdmins = MAX;
-        string frstnames, secnames, trdnames;
-
-        for (auto prod3: products)
-        {
-
-            if (prod3.getProductSold() < frstmins)
-            {
-                trdmins = secmins;
-                secmins = frstmins;
-                frstmins = prod3.getProductSold();
-                frstnames = prod3.getProductName();
-            }
- 
-            else if (prod3.getProductPrice() < secmins)
-            {
-                trdmins = secmins;
-                secmins = prod3.getProductSold();
-                secnames = prod3.getProductName();
-            }
-
-            else if (prod3.getProductSold() < trdmins)
-            {
-                trdmins = prod3.getProductSold();
-                trdnames = prod3.getProductName();
-            }
-        }
-
-        cout << endl << "Three least sold products (In ascending order): " << endl; 
-        cout << frstnames << ": " << frstmins << " (Amount of sales)" << endl;
-        cout << secnames << ": " << secmins << " (Amount of sales)" << endl;
-        cout << trdnames << ": " << trdmins << " (Amount of sales)" << endl;
-    } 
-
-//Sell product/-s from stock
-
-    void productSelling()
-    {
-        string sell;
-        int count_sale, count_stock, amount;
-        cout << "\nType the product you want to sell: ";
-        getline(cin >> ws, sell);
-        cout << "\nType how many products you want to sell (in numbers): ";
-        cin >> amount;
+        
+        vector<pair<int, string>> vectorcheap;
 
         for (auto prod: products)
         {
-            if (sell == prod.getProductName())
-            {
-                count_sale = prod.getProductSold();
-                count_stock = prod.getProductLeft();
-                prod.setProductSold(count_sale + amount);
-                prod.setProductLeft(count_stock - amount);
-                cout << "\nProduct successfully sold!" << endl;
-                cout << "\nAmount of products sold after the sale: " << prod.getProductSold() << endl;
-                cout << "\nProducts left in stock: " << prod.getProductLeft() << endl;
-            }
-
-            else
-            {
-                continue;
-            } 
+            vectorcheap.push_back(make_pair(prod.getProductPrice(), prod.getProductName()));
         }
-    }
 
-//Function to show info about a single product
+        sort(vectorcheap.rbegin(), vectorcheap.rend());
+        reverse(vectorcheap.rbegin(), vectorcheap.rend());
 
-    void oneProductData()
-    {
-        string singleprod;
-        cout << "Choose the product you want to display: ";
-        getline(cin >> ws, singleprod);
+        cout << "\nThree cheapest products: \n" << endl;
 
-        for (auto prod: products)
+        for (int i = 0; i < 3 ; i++)
         {
-            if (singleprod == prod.getProductName())
-            {
-                cout << "\nProduct data: " << endl;
-                cout << "\nName: " << prod.getProductName() << endl;
-                cout << "Price: " << prod.getProductPrice() << endl;
-                cout << "Amount left: " << prod.getProductLeft() << endl;
-                cout << "Amount sold: " << prod.getProductSold() << endl;
-            }
-
-            else
-            {
-                continue;
-            } 
+            cout << vectorcheap[i].second << ": " << vectorcheap[i].first << " Euro/-s\n" << endl;
         }
+
     }
 
-//Menu shown to the user
+    //Menu shown to the user
 
     void menu()
     {
@@ -515,10 +471,10 @@ public:
         cout << "Option 11: End program" << endl;
         cout << "Choose an option (by typing a number): ";
     }
-
 };
 
-//Main function prototype
+
+//Main function
 
 int main()
 {
@@ -536,43 +492,43 @@ int main()
         switch(option)
         {
             case One:
-                //Function to input product
+                //Function to input product (Line 131)
                 products.inputProduct();
                 break;
             case Two:
-                //Function to print all products
+                //Function to print all products (Line 232)
                 products.printAllProducts();
                 break;
             case Three:
-                //Function to sell a product
+                //Function to sell a product (Line 241)
                 products.productSelling();
                 break;
             case Four:
-                //Function to show data about a single product
+                //Function to show data about a single product (Line 272)
                 products.oneProductData();
                 break;
             case Five:
-                //Function to show Top 3 most sold products
+                //Function to show Top 3 most sold products (Line 298)
                 products.topMostSold();
                 break;
             case Six:
-                //Function to show Top 3 least sold products
+                //Function to show Top 3 least sold products (Line 327)
                 products.topLeastSold();
                 break;
             case Seven:
-                //Function to show Top 3 most earning products
+                //Function to show Top 3 most earning products (Line 351)
                 products.topMostEarned();
                 break;
             case Eight:
-                //Function to show Top 3 least earning products
+                //Function to show Top 3 least earning products (Line 374)
                 products.topLeastEarned();
                 break;
             case Nine:
-                //Function to show Top 3 most expensive products
+                //Function to show Top 3 most expensive products (Line 404)
                 products.topExpensive();
                 break;
             case Ten:
-                //Function to show Top 3 cheapest products
+                //Function to show Top 3 cheapest products (Line 433)
                 products.topCheapest();
                 break;
             case Eleven:
