@@ -298,30 +298,12 @@ public:
     //Top 3 most sold products (Task 5/Option 5)
 
     void topMostSold() {
-        int topCount = 3;
-        if (products.size() < 3) {
-            topCount = products.size();
+        vector<Product> tempProducts = this->products;
+        sort(tempProducts.begin(), tempProducts.end(), compareSold);
+        for (int i = 0; i < 3 && i < tempProducts.size(); i++) {
+            cout << "\nTop " << i + 1 << " of most sold: \n";
+            tempProducts[i].productPrint();
         }
-        Product * topSold = new Product[topCount];
-        
-        for (int i = 0; i < topCount; i++) {
-            topSold[i] = products[i];
-        }
-        sort(topSold, topSold+3, compareSold);
-
-        for (int i = 3; i < products.size(); i++) {
-            if (products[i].getProductSold() > topSold[topCount-1].getProductSold()) {
-                topSold[topCount-1] = products[i];
-                sort(topSold, topSold+3, compareSold);
-            }
-        }
-
-        cout << "\nTop " << topCount << " most sold products:\n\n";
-        for (int i = 0; i < topCount; i++) {
-            topSold[i].productPrint();
-        }
-
-        delete [] topSold;
     }
 
     //Top 3 least sold products (Task 6/Option 6)
@@ -374,60 +356,24 @@ public:
     //Top 3 least earning products (Task 8/Option 8)
 
     void topLeastEarned() {
-        int topCount = 3;
-        if (products.size() < 3) {
-            topCount = products.size();
+        vector<Product> tempProducts = this->products;
+        sort(tempProducts.begin(), tempProducts.end(), compareEarnings);
+        reverse(tempProducts.begin(), tempProducts.end());
+        for (int i = 0; i < 3 && i < tempProducts.size(); i++) {
+            cout << "\nTop " << i + 1 << " of least earning: \n";
+            tempProducts[i].productPrint();
         }
-        Product * leastEarned = new Product[topCount];
-        
-        for (int i = 0; i < topCount; i++) {
-            leastEarned[i] = products[i];
-        }
-        sort(leastEarned, leastEarned+3, compareEarnings);
-
-        for (int i = 3; i < products.size(); i++) {
-            if (products[i].getProductSold() * products[i].getProductPrice()  < leastEarned[0].getProductSold() * leastEarned[0].getProductPrice()) {
-                leastEarned[0] = products[i];
-                sort(leastEarned, leastEarned+3, compareEarnings);
-            }
-        }
-
-        cout << "\nTop " << topCount << " least earning products:\n\n";
-        for (int i = topCount-1; i >= 0; i--) {
-            leastEarned[i].productPrint();
-            cout << " Earned: " << leastEarned[i].getProductSold() * leastEarned[i].getProductPrice() << endl;
-        }
-
-        delete [] leastEarned;
     }
 
     //Top 3 most expensive products (Task 9/Option 9)
 
     void topExpensive() {
-        int topCount = 3;
-        if (products.size() < 3) {
-            topCount = products.size();
+        vector<Product> tempProducts = this->products;
+        sort(tempProducts.begin(), tempProducts.end(), comparePrice);
+        for (int i = 0; i < 3 && i < tempProducts.size(); i++) {
+            cout << "\nTop " << i + 1 << " of most expensive: \n";
+            tempProducts[i].productPrint();
         }
-        Product * topExpen = new Product[topCount];
-        
-        for (int i = 0; i < topCount; i++) {
-            topExpen[i] = products[i];
-        }
-        sort(topExpen, topExpen+3, comparePrice);
-
-        for (int i = 3; i < products.size(); i++) {
-            if (products[i].getProductPrice() > topExpen[topCount-1].getProductPrice()) {
-                topExpen[topCount-1] = products[i];
-                sort(topExpen, topExpen+3, comparePrice);
-            }
-        }
-
-        cout << "\nTop " << topCount << " most expensive:\n\n";
-        for (int i = 0; i < topCount; i++) {
-            topExpen[i].productPrint();
-        }
-
-    delete [] topExpen;
     }
 
     //Top 3 cheapest products (Task 10/Option 10)
