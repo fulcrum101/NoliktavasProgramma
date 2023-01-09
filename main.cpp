@@ -443,18 +443,57 @@ public:
 
     void productSelling()
     {
-        cout << "Choose the product you want to sell: " << endl;
+        string sell;
+        int count_sale, count_stock, amount;
+        cout << "Type the product you want to sell: ";
+        getline(cin >> ws, sell);
+        cout << "Type how many products you want to sell (in numbers): ";
+        cin >> amount;
 
+        for (auto prod: products)
+        {
+            if (sell == prod.getProductName())
+            {
+                count_sale = prod.getProductSold();
+                count_stock = prod.getProductLeft();
+                prod.setProductSold(count_sale + amount);
+                prod.setProductLeft(count_stock - amount);
+                cout << "Product successfully sold!" << endl;
+                cout << "Amount of products sold after the sale: " << prod.getProductSold() << endl;
+                cout << "Products left in stock: " << prod.getProductLeft() << endl;
+            }
 
+            else
+            {
+                continue;
+            } 
+        }
     }
 
 //Viens produkts dati
 
     void oneProductData()
     {
-        cout << "Choose the product you want to sell: " << endl;
+        string singleprod;
+        cout << "Choose the product you want to display: ";
+        getline(cin >> ws, singleprod);
 
+        for (auto prod: products)
+        {
+            if (singleprod == prod.getProductName())
+            {
+                cout << "Product data: " << endl;
+                cout << "Name: " << prod.getProductName() << endl;
+                cout << "Price: " << prod.getProductPrice() << endl;
+                cout << "Amount left: " << prod.getProductLeft() << endl;
+                cout << "Amount sold: " << prod.getProductSold() << endl;
+            }
 
+            else
+            {
+                continue;
+            } 
+        }
     }
 
 };
