@@ -9,7 +9,6 @@
 
 using namespace std;
 
-
 const int PRODUCT_NAME_LENGTH = 32;
 const char SAVE_FILE_PATH [13] = "saveFile.bin";
 
@@ -71,7 +70,6 @@ public:
             << setw(15) << "In stock: " << productLeftAmount << '\n'
             << setw(15) << "Total sold: " << productSoldAmount << "\n\n";
     }
-
 };
 
 bool compareSold(Product firstProduct, Product secondProduct) {
@@ -100,7 +98,6 @@ public:
     }
 
     //File reading and saving functions
-
     void saveToFile() {
         ofstream destination(SAVE_FILE_PATH, ios::binary);
 
@@ -121,7 +118,7 @@ public:
             source.open(SAVE_FILE_PATH, ios::binary);
         }
 
-        while (source.read((char*)&tempProduct, sizeof(Product))){
+        while (source.read((char*)&tempProduct, sizeof(Product))) {
             this->products.push_back(tempProduct);
         }
 
@@ -129,7 +126,6 @@ public:
     }
 
     //Input product function (Task 1/Option 1)
-
     void inputProduct() {
         bool productExists = 0;
         int existingProductIndex = -1;
@@ -164,7 +160,7 @@ public:
             cout << "Current stock: " << products[existingProductIndex].getProductLeft() << endl;
             cout << "Modify product in stock by: ";
             cin >> stock;
-            while (!cin.good()) {
+            while (!cin.good() || stock < 0) {
                 cin.clear();
 	            cin.ignore(numeric_limits<streamsize>::max(), '\n');
                 cout << "Error: bad input.\n Please input a valid number: ";
@@ -177,7 +173,7 @@ public:
         } else {
             cout << "Input product price: ";
             cin >> price;
-            while (!cin.good()) {
+            while (!cin.good() || price < 0) {
                 cin.clear();
 	            cin.ignore(numeric_limits<streamsize>::max(), '\n');
                 cout << "Error: bad input.\n Please input a valid number: ";
@@ -186,7 +182,7 @@ public:
 
             cout << "Input product in stock: ";
             cin >> stock;
-            while (!cin.good()) {
+            while (!cin.good() || stock < 0) {
                 cin.clear();
 	            cin.ignore(numeric_limits<streamsize>::max(), '\n');
                 cout << "Error: bad input.\n Please input a valid number: ";
@@ -194,15 +190,12 @@ public:
             }
 
             sold = 0;
-
-            cout << "\nProduct added successfully\n\n";
-
             products.push_back(Product(name, price, stock, sold));
+            cout << "\nProduct added successfully\n\n";
         }
     }
 
     //Print all products (Task 2/Option 2)
-
     void printAllProducts() {
         cout << "\nProdukti:\n";
         for (auto prod: products) {
@@ -211,67 +204,73 @@ public:
     }
 
     //Sell product/-s from stock (Task 3/Option 3)
-
-    void productSelling()
-    {
+    void productSelling() {
+        bool productFound = 0;
         string sell;
         int count_sale, count_stock, amount;
         cout << "\nType the product you want to sell: ";
         getline(cin >> ws, sell);
-        cout << "\nType how many products you want to sell (in numbers): ";
-        cin >> amount;
 
-        for (auto &prod: products)
-        {
-            if (sell == prod.getProductName())
-            {
+        for (auto &prod: products) {
+            if (sell == prod.getProductName()) {
+                productFound = 1;
+
+                cout << "\nType how many products you want to sell (in numbers): ";
+                cin >> amount;
+
                 count_sale = prod.getProductSold();
                 count_stock = prod.getProductLeft();
-                prod.setProductSold(count_sale + amount);
-                prod.setProductLeft(count_stock - amount);
-                cout << "\nProduct successfully sold!" << endl;
-                cout << "\nAmount of products sold after the sale: " << prod.getProductSold() << endl;
-                cout << "\nProducts left in stock: " << prod.getProductLeft() << endl;
-            }
-
-            else
-            {
+                if (count_stock - amount >= 0) {
+                    prod.setProductSold(count_sale + amount);
+                    prod.setProductLeft(count_stock - amount);
+                    cout << "\nProduct successfully sold!" << endl;
+                    cout << "\nAmount of products sold after the sale: " << prod.getProductSold() << endl;
+                    cout << "\nProducts left in stock: " << prod.getProductLeft() << endl;
+                } else {
+                    cout << "Error: Not enough product in stock to sell, action canceled!\n\n";
+                }
+                
+            } else {
                 continue;
             }
+        }
+
+        if (!productFound) {
+            cout << "Product \"" << sell << "\" was not found!\n\n";
         }
     }
 
     //Function to show info about a single product (Task 4/Option 4)
-
-    void oneProductData()
-    {
+    void oneProductData() {
+        bool productFound = 0;
         string singleprod;
         cout << "\nChoose the product you want to display: ";
         getline(cin >> ws, singleprod);
 
-        for (auto prod: products)
-        {
-            if (singleprod == prod.getProductName())
-            {
+        for (auto prod: products) {
+            if (singleprod == prod.getProductName()) {
+                productFound = 1;
+
                 cout << "\nProduct data: " << endl;
                 cout << "\nName: " << prod.getProductName() << endl;
                 cout << "Price: " << prod.getProductPrice() << endl;
                 cout << "Amount left: " << prod.getProductLeft() << endl;
                 cout << "Amount sold: " << prod.getProductSold() << endl;
-            }
-
-            else
-            {
+            } else {
                 continue;
             } 
+        }
+
+        if (!productFound) {
+            cout << "Product \"" << singleprod << "\" was not found!\n\n";
         }
     }
 
     //Top 3 most sold products (Task 5/Option 5)
-
     void topMostSold() {
         vector<Product> tempProducts = this->products;
         sort(tempProducts.begin(), tempProducts.end(), compareSold);
+
         for (int i = 0; i < 3 && i < tempProducts.size(); i++) {
             cout << "\nTop " << i + 1 << " of most sold: \n";
             tempProducts[i].productPrint();
@@ -279,40 +278,34 @@ public:
     }
 
     //Top 3 least sold products (Task 6/Option 6)
-
-    void topLeastSold() 
-    {
+    void topLeastSold() {
         vector<Product> tempProducts = this -> products;
         sort(tempProducts.begin(), tempProducts.end(), compareSold);
         reverse(tempProducts.begin(), tempProducts.end());
 
-        for (int i = 0; i < 3 && i < tempProducts.size(); i++)
-        {
+        for (int i = 0; i < 3 && i < tempProducts.size(); i++) {
             cout << "\nTop " << i + 1 << " of least sold: \n";
             tempProducts[i].productPrint();
         }
     }
 
     //Top 3 most earning products (Task 7/Option 7)
-
-    void topMostEarned() 
-    {
+    void topMostEarned() {
         vector<Product> tempProducts = this -> products;
         sort(tempProducts.begin(), tempProducts.end(), compareEarnings);
 
-        for (int i = 0; i < 3 && i < tempProducts.size(); i++) 
-        {
+        for (int i = 0; i < 3 && i < tempProducts.size(); i++) {
             cout << "\nTop " << i + 1 << " of most earned: \n";
             tempProducts[i].productPrint();
         }
     }
 
     //Top 3 least earning products (Task 8/Option 8)
-
     void topLeastEarned() {
         vector<Product> tempProducts = this->products;
         sort(tempProducts.begin(), tempProducts.end(), compareEarnings);
         reverse(tempProducts.begin(), tempProducts.end());
+
         for (int i = 0; i < 3 && i < tempProducts.size(); i++) {
             cout << "\nTop " << i + 1 << " of least earning: \n";
             tempProducts[i].productPrint();
@@ -320,10 +313,10 @@ public:
     }
 
     //Top 3 most expensive products (Task 9/Option 9)
-
     void topExpensive() {
         vector<Product> tempProducts = this->products;
         sort(tempProducts.begin(), tempProducts.end(), comparePrice);
+
         for (int i = 0; i < 3 && i < tempProducts.size(); i++) {
             cout << "\nTop " << i + 1 << " of most expensive: \n";
             tempProducts[i].productPrint();
@@ -331,24 +324,19 @@ public:
     }
 
     //Top 3 cheapest products (Task 10/Option 10)
-
-    void topCheapest()
-    {
+    void topCheapest() {
         vector<Product> tempProducts = this -> products;
         sort(tempProducts.begin(), tempProducts.end(), comparePrice);
         reverse(tempProducts.begin(), tempProducts.end());
 
-        for (int i = 0; i < 3 && i < tempProducts.size(); i++)
-        {
+        for (int i = 0; i < 3 && i < tempProducts.size(); i++) {
             cout << "\nTop " << i + 1 << " of cheapest: \n";
             tempProducts[i].productPrint();
         }
     }
 
     //Menu shown to the user
-
-    void menu()
-    {
+    void menu() {
         cout << "\nOption 1: Add a product/-s to stock" << endl;
         cout << "Option 2: Show all the products in stock" << endl;
         cout << "Option 3: Sell a product/-s" << endl;
@@ -364,24 +352,19 @@ public:
     }
 };
 
-
 //Main function
-
-int main()
-{
+int main() {
     ProductsContainer products;
     products.readFromFile();
     int option;
 
-    while (option != 11)
-    {
+    while (option != 11) {
         products.menu();
         cin >> option;
         cout << "\nChosen Option: " << option << endl;
         enum choices {One = 1, Two = 2, Three = 3, Four = 4, Five = 5, Six = 6, Seven = 7, Eight = 8, Nine = 9, Ten = 10, Eleven = 11};
 
-        switch(option)
-        {
+        switch(option) {
             case One:
                 //Function to input product (Line 131)
                 products.inputProduct();
@@ -428,12 +411,10 @@ int main()
             default:
                 cout << "Error: Choose one of the options!" << endl;
                 cin.clear();
-	            cin.ignore(numeric_limits<streamsize>::max(), '\n');
+                cin.ignore(numeric_limits<streamsize>::max(), '\n');
         }
-
-        
     }
-
+    
     products.saveToFile();
     return 0;
 }
