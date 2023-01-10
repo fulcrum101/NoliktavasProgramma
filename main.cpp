@@ -160,15 +160,6 @@ public:
 
         if (productExists) {
             cout << "Product \"" << name << "\" already exists, entering moddifying mode" << endl;
-            cout << "Current price: " << products[existingProductIndex].getProductPrice() << endl;
-            cout << "Modify product price by: ";
-            cin >> price;
-            while (!cin.good()) {
-                cin.clear();
-	            cin.ignore(numeric_limits<streamsize>::max(), '\n');
-                cout << "Error: bad input.\n Please input a valid number: ";
-                cin >> price;
-            }
 
             cout << "Current stock: " << products[existingProductIndex].getProductLeft() << endl;
             cout << "Modify product in stock by: ";
@@ -180,18 +171,6 @@ public:
                 cin >> stock;
             }
 
-            cout << "Current sold: " << products[existingProductIndex].getProductSold() << endl;
-            cout << "Modify product sold by: ";
-            cin >> sold;
-            while (!cin.good()) {
-                cin.clear();
-	            cin.ignore(numeric_limits<streamsize>::max(), '\n');
-                cout << "Error: bad input.\n Please input a valid number: ";
-                cin >> sold;
-            }
-
-            products[existingProductIndex].setProductPrice(products[existingProductIndex].getProductPrice() + price);
-            products[existingProductIndex].setProductSold(products[existingProductIndex].getProductSold() + sold);
             products[existingProductIndex].setProductLeft(products[existingProductIndex].getProductLeft() + stock);
 
             cout << "\nProduct info updated successfully\n\n";
@@ -214,14 +193,7 @@ public:
                 cin >> stock;
             }
 
-            cout << "Input product sold: ";
-            cin >> sold;
-            while (!cin.good()) {
-                cin.clear();
-	            cin.ignore(numeric_limits<streamsize>::max(), '\n');
-                cout << "Error: bad input.\n Please input a valid number: ";
-                cin >> sold;
-            }
+            sold = 0;
 
             cout << "\nProduct added successfully\n\n";
 
@@ -457,7 +429,9 @@ int main()
                 cout << "Error: Choose one of the options!" << endl;
         }
 
-        products.saveToFile();
+        
     }
+
+    products.saveToFile();
     return 0;
 }
