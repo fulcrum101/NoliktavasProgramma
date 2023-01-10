@@ -427,6 +427,8 @@ int main()
                 break;
             default:
                 cout << "Error: Choose one of the options!" << endl;
+                cin.clear();
+	            cin.ignore(numeric_limits<streamsize>::max(), '\n');
         }
 
         
