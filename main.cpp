@@ -373,43 +373,43 @@ int main() {
 
         switch(option) {
             case One:
-                //Function to input product (Line 131)
+                //Function to input product
                 products.inputProduct();
                 break;
             case Two:
-                //Function to print all products (Line 232)
+                //Function to print all products
                 products.printAllProducts();
                 break;
             case Three:
-                //Function to sell a product (Line 241)
+                //Function to sell a product
                 products.productSelling();
                 break;
             case Four:
-                //Function to show data about a single product (Line 272)
+                //Function to show data about a single product
                 products.oneProductData();
                 break;
             case Five:
-                //Function to show Top 3 most sold products (Line 298)
+                //Function to show Top 3 most sold products
                 products.topMostSold();
                 break;
             case Six:
-                //Function to show Top 3 least sold products (Line 327)
+                //Function to show Top 3 least sold products
                 products.topLeastSold();
                 break;
             case Seven:
-                //Function to show Top 3 most earning products (Line 351)
+                //Function to show Top 3 most earning products
                 products.topMostEarned();
                 break;
             case Eight:
-                //Function to show Top 3 least earning products (Line 374)
+                //Function to show Top 3 least earning products
                 products.topLeastEarned();
                 break;
             case Nine:
-                //Function to show Top 3 most expensive products (Line 404)
+                //Function to show Top 3 most expensive product
                 products.topExpensive();
                 break;
             case Ten:
-                //Function to show Top 3 cheapest products (Line 433)
+                //Function to show Top 3 cheapest products
                 products.topCheapest();
                 break;
             case Eleven:
