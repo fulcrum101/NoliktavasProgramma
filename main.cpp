@@ -137,7 +137,7 @@ public:
 
         cout << "Input product name: ";
         cin.clear();
-	cin.ignore();
+        cin.ignore();
         getline(cin, nameInput);
 	    
         if (nameInput.length() > PRODUCT_NAME_LENGTH - 1) {
@@ -165,7 +165,7 @@ public:
 		
             while (!cin.good() || stock < 0) {
                 cin.clear();
-	            cin.ignore(numeric_limits<streamsize>::max(), '\n');
+                cin.ignore(numeric_limits<streamsize>::max(), '\n');
                 cout << "Error: bad input.\n Please input a valid number: ";
                 cin >> stock;
             }
@@ -179,7 +179,7 @@ public:
 		
             while (!cin.good() || price < 0) {
                 cin.clear();
-	            cin.ignore(numeric_limits<streamsize>::max(), '\n');
+                cin.ignore(numeric_limits<streamsize>::max(), '\n');
                 cout << "Error: bad input.\n Please input a valid number: ";
                 cin >> price;
             }
@@ -189,7 +189,7 @@ public:
 		
             while (!cin.good() || stock < 0) {
                 cin.clear();
-	            cin.ignore(numeric_limits<streamsize>::max(), '\n');
+                cin.ignore(numeric_limits<streamsize>::max(), '\n');
                 cout << "Error: bad input.\n Please input a valid number: ";
                 cin >> stock;
             }
