@@ -93,6 +93,7 @@ public:
     ProductsContainer() {
 
     }
+	
     ~ProductsContainer() {
 
     }
@@ -136,13 +137,15 @@ public:
 
         cout << "Input product name: ";
         cin.clear();
-	    cin.ignore();
+	cin.ignore();
         getline(cin, nameInput);
+	    
         if (nameInput.length() > PRODUCT_NAME_LENGTH - 1) {
             nameInput.resize(PRODUCT_NAME_LENGTH);
             cout << "ERROR: Product name length exceeds " << PRODUCT_NAME_LENGTH-1 << " characters, "
                 << "truncated to: " << nameInput << "\n"; 
         }
+	    
         char name[PRODUCT_NAME_LENGTH] = "";
         strcpy(name, nameInput.c_str());
 
@@ -156,10 +159,10 @@ public:
 
         if (productExists) {
             cout << "Product \"" << name << "\" already exists, entering moddifying mode" << endl;
-
             cout << "Current stock: " << products[existingProductIndex].getProductLeft() << endl;
             cout << "Modify product in stock by: ";
             cin >> stock;
+		
             while (!cin.good() || stock < 0) {
                 cin.clear();
 	            cin.ignore(numeric_limits<streamsize>::max(), '\n');
@@ -173,6 +176,7 @@ public:
         } else {
             cout << "Input product price: ";
             cin >> price;
+		
             while (!cin.good() || price < 0) {
                 cin.clear();
 	            cin.ignore(numeric_limits<streamsize>::max(), '\n');
@@ -182,6 +186,7 @@ public:
 
             cout << "Input product in stock: ";
             cin >> stock;
+		
             while (!cin.good() || stock < 0) {
                 cin.clear();
 	            cin.ignore(numeric_limits<streamsize>::max(), '\n');
@@ -208,6 +213,7 @@ public:
         bool productFound = 0;
         string sell;
         int count_sale, count_stock, amount;
+	    
         cout << "\nType the product you want to sell: ";
         getline(cin >> ws, sell);
 
@@ -220,6 +226,7 @@ public:
 
                 count_sale = prod.getProductSold();
                 count_stock = prod.getProductLeft();
+		    
                 if (count_stock - amount >= 0) {
                     prod.setProductSold(count_sale + amount);
                     prod.setProductLeft(count_stock - amount);
@@ -228,8 +235,7 @@ public:
                     cout << "\nProducts left in stock: " << prod.getProductLeft() << endl;
                 } else {
                     cout << "Error: Not enough product in stock to sell, action canceled!\n\n";
-                }
-                
+                }   
             } else {
                 continue;
             }
@@ -244,6 +250,7 @@ public:
     void oneProductData() {
         bool productFound = 0;
         string singleprod;
+	    
         cout << "\nChoose the product you want to display: ";
         getline(cin >> ws, singleprod);
 
