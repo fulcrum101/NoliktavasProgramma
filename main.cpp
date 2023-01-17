@@ -421,15 +421,16 @@ public:
             int available = product.getProductLeft();
             if (price <= money)
             {
-                for (quantity = 1; (float(quantity) * price <= money) && (quantity <= available); quantity++)
+                quantity = 1;
+                while ((float(quantity) * price <= money) && (quantity <= available))
                 {
+                    quantity++;
                 }
                 quantity--;
-                if (quantity == 0)
+                if (quantity <= 0)
                 {
                     continue;
                 }
-
                 money -= price * float(quantity);
                 product.setProductLeft(available - quantity);
                 product.setProductSold(product.getProductSold() + quantity);
